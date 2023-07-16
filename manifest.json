@@ -3,7 +3,7 @@
 	"name": "Editor Width Slider",
 	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
-	"description": "The 'Editor Width Slider' plugin allows users to customize the Obsidian editor width with a convenient slider in the status bar. Enhance your editing experience by easily adjusting the editor width to suit your preferences.",
+	"description": "Customize Obsidian's editor width with a slider for a tailored editing experience.",
 	"author": "@MugishoMp",
 	"fundingUrl": "https://www.paypal.com/donate/?hosted_button_id=E4APAMMHVJE4N",
 	"isDesktopOnly": false
