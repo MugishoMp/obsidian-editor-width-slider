@@ -9,13 +9,13 @@
 
 ## Demo
 
-![Demo GIF](./images/demo-gif-full-size.gif) <!-- Replace with the path to your demo GIF -->
+![Demo GIF](./images/demo-gif-full-size.gif) 
 
 > Here is a brief demo showcasing the basic functionality of the Line Width Slider plugin.
 
 ## Installation
 
-1. Download the latest release of the plugin from the [Releases](https://github.com/your-username/obsidian-line-width-slider-plugin/releases) page.
+1. Download the latest release of the plugin from the [Releases](https://github.com/MugishoMp/obsidian-editor-width-slider/releases) page.
 2. Extract the plugin folder from the downloaded ZIP file.
 3. Copy the plugin folder into your Obsidian vault's `.obsidian/plugins` directory.
 4. Launch Obsidian and open the settings.
@@ -30,13 +30,24 @@
 
 ## Feedback and Support
 
-If you encounter any issues or have suggestions for improvements, please create a new [issue](https://github.com/your-username/obsidian-line-width-slider-plugin/issues) on the GitHub repository.
-
-## Contributing
-
-Contributions are welcome! If you would like to contribute to the project, please follow the [contribution guidelines](CONTRIBUTING.md).
+If you encounter any issues or have suggestions for improvements, please create a new [issue](https://github.com/MugishoMp/obsidian-editor-width-slider/issues) on the GitHub repository.
 
 ## License
 
-This plugin is licensed under the [MIT License](LICENSE).
+This plugin is licensed under the MIT License. You are free to use, modify, 
+distribute, and even sell copies of the code. However, please note that the 
+plugin is provided "as is" without any warranty. You should include the original 
+copyright notice and the license notice in all copies or substantial portions of 
+the code. The MIT License allows you the freedom to customize and adapt the 
+plugin to suit your needs, collaborate with others, and incorporate it into both 
+commercial and non-commercial projects. Feel free to explore and enhance the 
+functionality of the plugin, and remember to share any improvements or 
+modifications you make with the community.
+
+## Support Me
+
+If you find my work valuable or simply want to support this broke CS student's caffeine-fueled coding adventures, you can make a donation through PayPal. Your contribution is greatly appreciated and helps keep the coffee flowing! ☕️🖥️
+
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=E4APAMMHVJE4N)
+
 
