@@ -1,11 +1,10 @@
 {
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
+	"id": "obsidian-editor-width-slider",
+	"name": "Editor Width Slider",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "This is a sample plugin for Obsidian. This plugin demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"description": "The 'Editor Width Slider' plugin allows users to customize the Obsidian editor width with a convenient slider in the status bar. Enhance your editing experience by easily adjusting the editor width to suit your preferences.",
+	"author": "@MugishoMp",
+	"fundingUrl": "https://www.paypal.com/donate/?hosted_button_id=E4APAMMHVJE4N",
 	"isDesktopOnly": false
 }
