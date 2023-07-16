@@ -11,7 +11,7 @@ interface EditorWidthSliderSettings {
 }
 // the default value of the thing you want to store 
 const DEFAULT_SETTINGS: EditorWidthSliderSettings = {
-	sliderPercentage: '50'
+	sliderPercentage: '20'
 }
 // ---------------------------- Storing Information ----------------------------
 
@@ -46,10 +46,9 @@ export default class EditorWidthSlider extends Plugin {
 	}
 
 	onunload() {
-
+		this.cleanUpResources();
 	}
-
-
+	
 	// ---------------------------- SLIDER -------------------------------------
 	createSlider() {
 
@@ -91,7 +90,18 @@ export default class EditorWidthSlider extends Plugin {
 	}
 	// ---------------------------- SLIDER -------------------------------------
 
+	cleanUpResources() {
+		this.resetEditorWidth();
+	}
 
+	resetEditorWidth() {
+		const value = 0;
+		// const widthInPixels = 400 + value * 10;
+		this.settings.sliderPercentage = value.toString();
+
+		this.saveSettings();
+		this.updateEditorStyle();
+	}
 
 	// add the styling elements we need
 	addStyle() {
@@ -111,11 +121,11 @@ export default class EditorWidthSlider extends Plugin {
 	// update the styles (at the start, or as the result of a settings change)
 	updateEditorStyle() {
 		// get the custom css element
-		const el = document.getElementById('additional-editor-css');
-		if (!el) throw "additional-editor-css element not found!";
+		const styleElement = document.getElementById('additional-editor-css');
+		if (!styleElement) throw "additional-editor-css element not found!";
 		else {
 
-		el.innerText = `
+		styleElement.innerText = `
 			body {
 			--file-line-width: calc(700px + 10 * ${this.settings.sliderPercentage}px);
 		`;
