@@ -32,22 +32,17 @@
 
 If you encounter any issues or have suggestions for improvements, please create a new [issue](https://github.com/MugishoMp/obsidian-editor-width-slider/issues) on the GitHub repository.
 
-## License
-
-This plugin is licensed under the MIT License. You are free to use, modify, 
-distribute, and even sell copies of the code. However, please note that the 
-plugin is provided "as is" without any warranty. You should include the original 
-copyright notice and the license notice in all copies or substantial portions of 
-the code. The MIT License allows you the freedom to customize and adapt the 
-plugin to suit your needs, collaborate with others, and incorporate it into both 
-commercial and non-commercial projects. Feel free to explore and enhance the 
-functionality of the plugin, and remember to share any improvements or 
-modifications you make with the community.
-
 ## Support Me
 
 If you find my work valuable or simply want to support this broke CS student's caffeine-fueled coding adventures, you can make a donation through PayPal. Your contribution is greatly appreciated and helps keep the coffee flowing! ☕️🖥️
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=E4APAMMHVJE4N)
 
+
+## License
+
+This plugin is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+---
+
+Please note that this plugin is provided as-is without any warranty. Use it at your own risk.
 
