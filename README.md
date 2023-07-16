@@ -1,7 +1,4 @@
 # Obsidian Line Width Slider Plugin
-
-![Plugin Logo](./plugin-logo.png) <!-- Replace with your plugin logo -->
-
 > A plugin for Obsidian that allows you to adjust the editor line width using a simple slider in the status bar.
 
 ## Features
@@ -12,7 +9,7 @@
 
 ## Demo
 
-![Demo GIF](./demo.gif) <!-- Replace with the path to your demo GIF -->
+![Demo GIF](./images/demo-gif-full-size.gif) <!-- Replace with the path to your demo GIF -->
 
 > Here is a brief demo showcasing the basic functionality of the Line Width Slider plugin.
 
