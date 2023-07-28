@@ -1,21 +1,26 @@
-import { 
-	Plugin
-} from 'obsidian';
+import { Plugin } from 'obsidian';
+import EditorWidthSliderSettingTab from "settingsTab";
 
 // ---------------------------- Storing Information ----------------------------
+
 // This plugin will store a single string
 interface EditorWidthSliderSettings {
 	sliderPercentage: string;
+	sliderWidth: string;
 }
 // the default value of the thing you want to store 
 const DEFAULT_SETTINGS: EditorWidthSliderSettings = {
-	sliderPercentage: '20'
+	sliderPercentage: '20',
+	sliderWidth: '150',
 }
+
 // ---------------------------- Storing Information ----------------------------
+
 
 
 
 // ---------------------------- Plugin Class -----------------------------------
+
 export default class EditorWidthSlider extends Plugin {
 	settings: EditorWidthSliderSettings;
 
@@ -25,6 +30,9 @@ export default class EditorWidthSlider extends Plugin {
 	async onload() {
 		await this.loadSettings();
 		
+		// This adds a settings tab so the user can configure various aspects of the plugin
+		this.addSettingTab(new EditorWidthSliderSettingTab(this.app, this));
+
 		this.addStyle();
 
 		this.createSlider();
@@ -34,8 +42,11 @@ export default class EditorWidthSlider extends Plugin {
 		this.cleanUpResources();
 	}
 	
+
 	// ---------------------------- SLIDER -------------------------------------
-	createSlider() {
+	
+	createSlider()
+	{
 
 		// Create the slider element
 		const slider = document.createElement('input');
@@ -44,8 +55,9 @@ export default class EditorWidthSlider extends Plugin {
 		slider.min = '0';
 		slider.max = '100';
 		slider.value = this.settings.sliderPercentage;
+		
 		// Adjust the width value as needed
-		slider.style.width = '150px'; 
+		slider.style.width = this.settings.sliderWidth + 'px'; 
 		
 		// Add event listener to the slider
 		slider.addEventListener('input', (event) => {
@@ -66,19 +78,23 @@ export default class EditorWidthSlider extends Plugin {
 		sliderValueText.classList.add('editor-width-slider-value');
 		sliderValueText.style.marginLeft = '5px';
 
-
 		// Create the status bar item
 		const statusBarItemEl = this.addStatusBarItem();
+
 		// Append the slider to the status bar item
 		statusBarItemEl.appendChild(slider);
 		statusBarItemEl.appendChild(sliderValueText);
 	}
+
 	// ---------------------------- SLIDER -------------------------------------
 
+
+	// cleanup
 	cleanUpResources() {
 		this.resetEditorWidth();
 	}
 
+	// resets the editor width
 	resetEditorWidth() {
 		const value = 0;
 		// const widthInPixels = 400 + value * 10;
@@ -109,12 +125,11 @@ export default class EditorWidthSlider extends Plugin {
 		const styleElement = document.getElementById('additional-editor-css');
 		if (!styleElement) throw "additional-editor-css element not found!";
 		else {
-
-		styleElement.innerText = `
+		styleElement.innerText =
+		`
 			body {
 			--file-line-width: calc(700px + 10 * ${this.settings.sliderPercentage}px);
 		`;
-
 		}
 	}
 
@@ -133,4 +148,6 @@ export default class EditorWidthSlider extends Plugin {
 	}
 
 }
+
+
 // ---------------------------- Plugin Class -----------------------------------
