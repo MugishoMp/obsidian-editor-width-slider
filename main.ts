@@ -112,7 +112,8 @@ export default class EditorWidthSlider extends Plugin {
 
 		styleElement.innerText = `
 			body {
-			--file-line-width: calc(700px + 10 * ${this.settings.sliderPercentage}px);
+			  	--file-line-width: calc(700px + 10 * ${this.settings.sliderPercentage}px);
+			}
 		`;
 
 		}
