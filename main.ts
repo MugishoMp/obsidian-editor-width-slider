@@ -1,15 +1,20 @@
 import { 
-	Plugin
+	Plugin,
+	App,
+	PluginSettingTab,
+	Setting
 } from 'obsidian';
 
 // ---------------------------- Storing Information ----------------------------
 // This plugin will store a single string
 interface EditorWidthSliderSettings {
 	sliderPercentage: string;
+	sliderWidth: string;
 }
 // the default value of the thing you want to store 
 const DEFAULT_SETTINGS: EditorWidthSliderSettings = {
-	sliderPercentage: '20'
+	sliderPercentage: '20',
+	sliderWidth: '150'
 }
 // ---------------------------- Storing Information ----------------------------
 
@@ -28,6 +33,8 @@ export default class EditorWidthSlider extends Plugin {
 		this.addStyle();
 
 		this.createSlider();
+
+		this.addSettingTab(new EditorWidthSliderSettingTab(this.app, this));
 	}
 
 	onunload() {
@@ -45,7 +52,7 @@ export default class EditorWidthSlider extends Plugin {
 		slider.max = '100';
 		slider.value = this.settings.sliderPercentage;
 		// Adjust the width value as needed
-		slider.style.width = '150px'; 
+		slider.style.width = this.settings.sliderWidth + 'px'; 
 		
 		// Add event listener to the slider
 		slider.addEventListener('input', (event) => {
@@ -119,6 +126,21 @@ export default class EditorWidthSlider extends Plugin {
 		}
 	}
 
+	// update the styles (at the start, or as the result of a settings change)
+	updateSliderStyle() {
+		// get the custom css element
+		const styleElements = document.getElementsByClassName('editor-width-slider');
+		
+		if (styleElements.length === 0) {
+			throw new Error("editor-width-slider-value element not found!");
+		} else {
+			// Access the first element in the collection and modify its style
+			const styleElement = styleElements[0] as HTMLElement;
+			styleElement.style.width = this.settings.sliderWidth + 'px';
+		}
+	}
+
+
 	// Method to load settings
 	async loadSettings() {
 		this.settings = Object.assign(
@@ -135,3 +157,30 @@ export default class EditorWidthSlider extends Plugin {
 
 }
 // ---------------------------- Plugin Class -----------------------------------
+
+class EditorWidthSliderSettingTab extends PluginSettingTab {
+	plugin: EditorWidthSlider;
+
+	constructor(app: App, plugin: EditorWidthSlider) {
+		super(app, plugin);
+		this.plugin = plugin;
+	}
+	// this.settings.sliderWidth
+	display(): void {
+		const {containerEl} = this;
+
+		containerEl.empty();
+
+		new Setting(containerEl)
+			.setName('Slider Width')
+			.setDesc('How wide do you want your slider to be?')
+			.addText(text => text
+				.setPlaceholder('Enter your secret')
+				.setValue(this.plugin.settings.sliderWidth)
+				.onChange(async (value) => {
+					this.plugin.settings.sliderWidth = value;
+					this.plugin.updateSliderStyle();
+					await this.plugin.saveSettings();
+				}));
+	}
+}
