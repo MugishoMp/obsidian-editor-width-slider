@@ -49,25 +49,6 @@ export default class EditorWidthSlider extends Plugin {
 	onunload() {
 		this.cleanUpResources();
 	}
-
-	addStyleFromYAML() {
-		this.app.workspace.on('file-open', () => {
-			// console.log("test");
-			// if there is yaml frontmatter, take info from yaml, otherwise take info from slider
-			const file = this.app.workspace.getActiveFile(); // Currently Open Note
-			if(file.name) {
-				const metadata = app.metadataCache.getFileCache(file);
-				// const metadata = app.vault.metadataCache.getFileCache(file);
-				if (metadata) {
-					if (metadata.frontmatter)
-						console.log(metadata.frontmatter);
-					else
-						console.log("no frontmatter available");
-				}
-			}
-			// return; // Nothing Open
-		})
-	}
 	
 	// ---------------------------- SLIDER -------------------------------------
 	createSlider() {
@@ -148,6 +129,51 @@ export default class EditorWidthSlider extends Plugin {
 		styleElement.innerText = `
 			body {
 			  	--file-line-width: calc(700px + 10 * ${this.settings.sliderPercentage}px) !important;
+			}
+		`;
+
+		}
+	}
+
+	pattern = /^(?:[0-9]|[1-9][0-9]{1,2}|1000)(px|%)$/;
+
+	validateString(inputString: string): boolean {
+		return this.pattern.test(inputString);
+	}
+
+	addStyleFromYAML() {
+		this.app.workspace.on('file-open', () => {
+			// console.log("test");
+			// if there is yaml frontmatter, take info from yaml, otherwise take info from slider
+			const file = this.app.workspace.getActiveFile(); // Currently Open Note
+			if(file.name) {
+				const metadata = app.metadataCache.getFileCache(file);
+				// const metadata = app.vault.metadataCache.getFileCache(file);
+				if (metadata) {
+					if (metadata.frontmatter)
+						if (metadata.frontmatter["editor-width-px"]) {
+							console.log(metadata.frontmatter["editor-width"]);
+							this.updateEditorStyle
+						}
+					else
+						this.updateEditorStyle();
+				}
+			}
+			// return; // Nothing Open
+		})
+	}
+
+
+	// update the styles (at the start, or as the result of a settings change)
+	updateEditorStyleYAML(editorWidth: any) {
+		// get the custom css element
+		const styleElement = document.getElementById('additional-editor-css');
+		if (!styleElement) throw "additional-editor-css element not found!";
+		else {
+
+		styleElement.innerText = `
+			body {
+			  	--file-line-width: calc(700px + 10 * ${editorWidth}px) !important;
 			}
 		`;
 
