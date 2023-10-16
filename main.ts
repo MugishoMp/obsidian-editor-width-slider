@@ -2,7 +2,8 @@ import {
 	Plugin,
 	App,
 	PluginSettingTab,
-	Setting
+	Setting,
+	TFile
 } from 'obsidian';
 
 // ---------------------------- Storing Information ----------------------------
@@ -35,10 +36,37 @@ export default class EditorWidthSlider extends Plugin {
 		this.createSlider();
 
 		this.addSettingTab(new EditorWidthSliderSettingTab(this.app, this));
+
+		this.addStyleFromYAML();
 	}
+
+	// async onLoadFile(file: TFile) {
+	// 	console.log("test");
+		
+
+	// }
 
 	onunload() {
 		this.cleanUpResources();
+	}
+
+	addStyleFromYAML() {
+		this.app.workspace.on('file-open', () => {
+			// console.log("test");
+			// if there is yaml frontmatter, take info from yaml, otherwise take info from slider
+			const file = this.app.workspace.getActiveFile(); // Currently Open Note
+			if(file.name) {
+				const metadata = app.metadataCache.getFileCache(file);
+				// const metadata = app.vault.metadataCache.getFileCache(file);
+				if (metadata) {
+					if (metadata.frontmatter)
+						console.log(metadata.frontmatter);
+					else
+						console.log("no frontmatter available");
+				}
+			}
+			// return; // Nothing Open
+		})
 	}
 	
 	// ---------------------------- SLIDER -------------------------------------
