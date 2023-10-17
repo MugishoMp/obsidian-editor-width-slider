@@ -1,24 +1,21 @@
 import { 
-	Plugin,
-	App,
-	PluginSettingTab,
-	Setting
+	Plugin
 } from 'obsidian';
 
-// ---------------------------- Storing Information ----------------------------
-// This plugin will store a single string
-interface EditorWidthSliderSettings {
-	sliderPercentage: string;
-	sliderWidth: string;
-}
-// the default value of the thing you want to store 
-const DEFAULT_SETTINGS: EditorWidthSliderSettings = {
-	sliderPercentage: '20',
-	sliderWidth: '150'
-}
-// ---------------------------- Storing Information ----------------------------
+
+import {
+	DEFAULT_SETTINGS,
+	EditorWidthSliderSettingTab
+} from "./settings/settings";
+
+import { 
+	EditorWidthSliderSettings 
+} from './types/settings';
 
 
+import { 
+	WarningModal 
+} from './modal/warning';
 
 // ---------------------------- Plugin Class -----------------------------------
 export default class EditorWidthSlider extends Plugin {
@@ -31,11 +28,19 @@ export default class EditorWidthSlider extends Plugin {
 		await this.loadSettings();
 		
 		this.addStyle();
+		this.addStyleFromYAML();
 
 		this.createSlider();
 
 		this.addSettingTab(new EditorWidthSliderSettingTab(this.app, this));
+
 	}
+
+	// async onLoadFile(file: TFile) {
+	// 	console.log("test");
+		
+
+	// }
 
 	onunload() {
 		this.cleanUpResources();
@@ -126,6 +131,60 @@ export default class EditorWidthSlider extends Plugin {
 		}
 	}
 
+	pattern = /^(?:[0-9]{1,2}|100)$/;
+
+	validateString(inputString: string): boolean {
+		return this.pattern.test(inputString);
+	}
+
+	addStyleFromYAML() {
+		this.app.workspace.on('file-open', () => {
+			// console.log("test");
+			// if there is yaml frontmatter, take info from yaml, otherwise take info from slider
+			const file = this.app.workspace.getActiveFile(); // Currently Open Note
+			if(file.name) {
+				const metadata = app.metadataCache.getFileCache(file);
+				// const metadata = app.vault.metadataCache.getFileCache(file);
+				if (metadata) {
+					if (metadata.frontmatter) {
+						try {
+							if (metadata.frontmatter["editor-width"]) {
+								if (this.validateString(metadata.frontmatter["editor-width"])) {
+									this.updateEditorStyleYAML(metadata.frontmatter["editor-width"]);
+								} else {
+									new WarningModal(this.app).open();
+									throw new Error("Editor width must be a number from 0 to 100.");
+								}
+							}
+						} catch (e) {
+							console.error("Error:", e.message);
+						}
+					} else {
+						this.updateEditorStyle();
+					}
+				}
+			}
+			// return; // Nothing Open
+		})
+	}
+
+
+	// update the styles (at the start, or as the result of a settings change)
+	updateEditorStyleYAML(editorWidth: any) {
+		// get the custom css element
+		const styleElement = document.getElementById('additional-editor-css');
+		if (!styleElement) throw "additional-editor-css element not found!";
+		else {
+
+		styleElement.innerText = `
+			body {
+			  	--file-line-width: calc(100px + ${editorWidth}vw) !important;
+			}
+		`;
+
+		}
+	}
+
 	// update the styles (at the start, or as the result of a settings change)
 	updateSliderStyle() {
 		// get the custom css element
@@ -157,30 +216,3 @@ export default class EditorWidthSlider extends Plugin {
 
 }
 // ---------------------------- Plugin Class -----------------------------------
-
-class EditorWidthSliderSettingTab extends PluginSettingTab {
-	plugin: EditorWidthSlider;
-
-	constructor(app: App, plugin: EditorWidthSlider) {
-		super(app, plugin);
-		this.plugin = plugin;
-	}
-	// this.settings.sliderWidth
-	display(): void {
-		const {containerEl} = this;
-
-		containerEl.empty();
-
-		new Setting(containerEl)
-			.setName('Slider Width')
-			.setDesc('How wide do you want your slider to be?')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.sliderWidth)
-				.onChange(async (value) => {
-					this.plugin.settings.sliderWidth = value;
-					this.plugin.updateSliderStyle();
-					await this.plugin.saveSettings();
-				}));
-	}
-}
