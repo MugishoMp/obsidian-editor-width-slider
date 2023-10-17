@@ -7,6 +7,25 @@
 - Increase or decrease the line width to customize your editing experience.
 - Simple and intuitive interface for easy usage.
 
+### Feature: Custom for Individual Files using YAML
+
+With the Obsidian Line Width Slider Plugin, you can now customize the editor width for individual files by specifying an "editor-width" field in the YAML frontmatter of your notes. This feature allows you to have different line widths for different files, giving you greater flexibility in your note-taking and editing experience.
+
+#### Setting the Editor Width
+
+To set a custom editor width for a specific file, follow these steps:
+
+1. Open the note for which you want to customize the editor width.
+
+2. In the YAML frontmatter section at the top of the note, add an "editor-width" field. The value of this field should be a number between 0 and 100, representing the desired editor width as a percentage of the viewport width. For example:
+
+   ```yaml
+   ---
+   title: My Customized Note
+   editor-width: 75
+   ---
+   ```
+
 ## Demo
 
 ![Demo GIF](./images/demo-gif-full-size.gif) 

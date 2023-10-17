@@ -32,12 +32,17 @@ export class EditorWidthSliderSettingTab extends PluginSettingTab {
 			.setName('Slider Width')
 			.setDesc('How wide do you want your slider to be?')
 			.addText(text => text
-				.setPlaceholder('Enter your secret')
+				.setPlaceholder('Slider width in px')
 				.setValue(this.plugin.settings.sliderWidth)
 				.onChange(async (value) => {
 					this.plugin.settings.sliderWidth = value;
 					this.plugin.updateSliderStyle();
 					await this.plugin.saveSettings();
 				}));
+
+        new Setting(containerEl)
+            .setName('Note:')
+            .setDesc('The field should be named "editor-width" in the YAML frontmatter of the note in order to customize the editor width of that repective note. It won\'t work globally for all notes unless you specify it in each note\'s frontmatter.');
+
 	}
 }
