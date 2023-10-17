@@ -1,5 +1,5 @@
 import { 
-	Plugin
+	Plugin, TFile
 } from 'obsidian';
 
 
@@ -28,7 +28,10 @@ export default class EditorWidthSlider extends Plugin {
 		await this.loadSettings();
 		
 		this.addStyle();
-		this.addStyleFromYAML();
+
+		this.app.workspace.on('file-open', () => {
+			this.updateEditorStyleYAML();
+		});
 
 		this.createSlider();
 
@@ -37,7 +40,6 @@ export default class EditorWidthSlider extends Plugin {
 	}
 
 	// async onLoadFile(file: TFile) {
-	// 	console.log("test");
 		
 
 	// }
@@ -52,6 +54,7 @@ export default class EditorWidthSlider extends Plugin {
 		// Create the slider element
 		const slider = document.createElement('input');
 		slider.classList.add('editor-width-slider');
+		slider.id = 'editor-width-slider';
 		slider.type = 'range';
 		slider.min = '0';
 		slider.max = '100';
@@ -76,6 +79,7 @@ export default class EditorWidthSlider extends Plugin {
 		const sliderValueText = document.createElement('span');
 		sliderValueText.textContent = slider.value;
 		sliderValueText.classList.add('editor-width-slider-value');
+		sliderValueText.id = 'editor-width-slider-value';
 
 		// Add the CSS properties to the span element
 		sliderValueText.style.color = 'white';
@@ -101,20 +105,6 @@ export default class EditorWidthSlider extends Plugin {
 			sliderValueText.style.background = 'var(--interactive-accent)';
 		});
 
-		// color: white;
-		// padding: 9px 5px;
-		// display: inline;
-		// border-radius: 18%;
-		// font-family: "Arial";
-		// border: 0;
-		// margin: 0px 10px;
-		// background: var(--interactive-accent);
-		// font-size: 15px;
-		// line-height: 50%;
-		// width: auto;
-		// height: auto;
-		// box-sizing: content-box;
-
 		// Add a click event listener to the slider value text
 		sliderValueText.addEventListener('click', () => {
 			console.log("test");
@@ -136,14 +126,24 @@ export default class EditorWidthSlider extends Plugin {
 	resetEditorWidth() {
 		// const widthInPixels = 400 + value * 10;
 		this.settings.sliderPercentage = this.settings.sliderPercentageDefault;
-		const slider = document.getElementById('editor-width-slider')
-		if (slider) slider.value = this.settings.sliderPercentageDefault;
+
+		// get the custom css element
+		const styleElements = document.getElementsByClassName('editor-width-slider');
+		const slider = document.getElementById('editor-width-slider') as HTMLInputElement;
+		const sliderValue = document.getElementById('editor-width-slider-value') as HTMLInputElement;
+		if (slider) {
+			if (sliderValue) {
+				console.log("2");
+				slider.value = this.settings.sliderPercentageDefault;
+				sliderValue.textContent = this.settings.sliderPercentageDefault.toString();
+			}
+		}
 
 		this.saveSettings();
-		this.updateEditorStyle();
+		this.updateEditorStyleYAML();
 	}
 
-	// add the styling elements we need
+	// add element that contains all of the styling elements we need
 	addStyle() {
 		// add a css block for our settings-dependent styles
 		const css = document.createElement('style');
@@ -154,7 +154,7 @@ export default class EditorWidthSlider extends Plugin {
 		document.body.classList.add('additional-editor-css');
 
 		// update the style with the settings-dependent styles
-		this.updateEditorStyle();
+		// this.updateEditorStyle();
 	}
 
 	
@@ -174,46 +174,9 @@ export default class EditorWidthSlider extends Plugin {
 		}
 	}
 
-	pattern = /^(?:[0-9]{1,2}|100)$/;
-
-	validateString(inputString: string): boolean {
-		return this.pattern.test(inputString);
-	}
-
-	addStyleFromYAML() {
-		this.app.workspace.on('file-open', () => {
-			// console.log("test");
-			// if there is yaml frontmatter, take info from yaml, otherwise take info from slider
-			const file = this.app.workspace.getActiveFile(); // Currently Open Note
-			if(file.name) {
-				const metadata = app.metadataCache.getFileCache(file);
-				// const metadata = app.vault.metadataCache.getFileCache(file);
-				if (metadata) {
-					if (metadata.frontmatter) {
-						try {
-							if (metadata.frontmatter["editor-width"]) {
-								if (this.validateString(metadata.frontmatter["editor-width"])) {
-									this.updateEditorStyleYAML(metadata.frontmatter["editor-width"]);
-								} else {
-									new WarningModal(this.app).open();
-									throw new Error("Editor width must be a number from 0 to 100.");
-								}
-							}
-						} catch (e) {
-							console.error("Error:", e.message);
-						}
-					} else {
-						this.updateEditorStyle();
-					}
-				}
-			}
-			// return; // Nothing Open
-		})
-	}
-
 
 	// update the styles (at the start, or as the result of a settings change)
-	updateEditorStyleYAML(editorWidth: any) {
+	updateEditorStyleYAMLHelper(editorWidth: any) {
 		// get the custom css element
 		const styleElement = document.getElementById('additional-editor-css');
 		if (!styleElement) throw "additional-editor-css element not found!";
@@ -226,6 +189,44 @@ export default class EditorWidthSlider extends Plugin {
 		`;
 
 		}
+	}
+
+	pattern = /^(?:[0-9]{1,2}|100)$/;
+
+	validateString(inputString: string): boolean {
+		return this.pattern.test(inputString);
+	}
+
+	updateEditorStyleYAML() {
+		console.log("1.1");
+		// if there is yaml frontmatter, take info from yaml, otherwise take info from slider
+		const file = this.app.workspace.getActiveFile() as TFile; // Currently Open Note
+		console.log("1.2");
+		if(file.name) {
+			const metadata = app.metadataCache.getFileCache(file);
+			// const metadata = app.vault.metadataCache.getFileCache(file);
+			if (metadata) {
+				if (metadata.frontmatter) {
+					try {
+						if (metadata.frontmatter["editor-width"]) {
+							if (this.validateString(metadata.frontmatter["editor-width"])) {
+								this.updateEditorStyleYAMLHelper(metadata.frontmatter["editor-width"]);
+							} else {
+								new WarningModal(this.app).open();
+								throw new Error("Editor width must be a number from 0 to 100.");
+							}
+						} else {
+							this.updateEditorStyle();
+						}
+					} catch (e) {
+						console.error("Error:", e.message);
+					}
+				} else {
+					this.updateEditorStyle();
+				}
+			}
+		}
+		// return; // Nothing Open
 	}
 
 	// update the styles (at the start, or as the result of a settings change)
