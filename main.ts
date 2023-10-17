@@ -135,7 +135,7 @@ export default class EditorWidthSlider extends Plugin {
 		}
 	}
 
-	pattern = /^(?:[0-9]|[1-9][0-9]{1,2}|1000)(px|%)$/;
+	pattern = /^(?:[0-9]{1,2}|100)$/;
 
 	validateString(inputString: string): boolean {
 		return this.pattern.test(inputString);
@@ -150,13 +150,21 @@ export default class EditorWidthSlider extends Plugin {
 				const metadata = app.metadataCache.getFileCache(file);
 				// const metadata = app.vault.metadataCache.getFileCache(file);
 				if (metadata) {
-					if (metadata.frontmatter)
-						if (metadata.frontmatter["editor-width-px"]) {
-							console.log(metadata.frontmatter["editor-width"]);
-							this.updateEditorStyle
+					if (metadata.frontmatter) {
+						try {
+							if (metadata.frontmatter["editor-width"]) {
+								if (this.validateString(metadata.frontmatter["editor-width"])) {
+									this.updateEditorStyleYAML(metadata.frontmatter["editor-width"]);
+								} else {
+									throw new Error("Editor width must be a number from 0 to 100.");
+								}
+							}
+						} catch (e) {
+							console.error("Error:", e.message);
 						}
-					else
+					} else {
 						this.updateEditorStyle();
+					}
 				}
 			}
 			// return; // Nothing Open
@@ -173,7 +181,7 @@ export default class EditorWidthSlider extends Plugin {
 
 		styleElement.innerText = `
 			body {
-			  	--file-line-width: calc(700px + 10 * ${editorWidth}px) !important;
+			  	--file-line-width: calc(100px + ${editorWidth}vw) !important;
 			}
 		`;
 
