@@ -76,8 +76,50 @@ export default class EditorWidthSlider extends Plugin {
 		const sliderValueText = document.createElement('span');
 		sliderValueText.textContent = slider.value;
 		sliderValueText.classList.add('editor-width-slider-value');
-		sliderValueText.style.marginLeft = '5px';
 
+		// Add the CSS properties to the span element
+		sliderValueText.style.color = 'white';
+		sliderValueText.style.padding = '8px 5px';
+		sliderValueText.style.display = 'inline';
+		sliderValueText.style.borderRadius = '18%';
+		sliderValueText.style.border = '0';
+		sliderValueText.style.margin = '0px 10px';
+		sliderValueText.style.background = 'var(--interactive-accent)';
+		sliderValueText.style.fontSize = '13px';
+		sliderValueText.style.lineHeight = '50%';
+		sliderValueText.style.width = 'auto';
+		sliderValueText.style.height = 'auto';
+		sliderValueText.style.boxSizing = 'content-box';
+
+		// Add a hover effect to change the background color to red
+		sliderValueText.style.transition = 'background 0.3s'; // Add smooth transition
+		sliderValueText.style.cursor = 'pointer'; // Change cursor on hover
+		sliderValueText.addEventListener('mouseenter', function() {
+			sliderValueText.style.background = 'red';
+		});
+		sliderValueText.addEventListener('mouseleave', function() {
+			sliderValueText.style.background = 'var(--interactive-accent)';
+		});
+
+		// color: white;
+		// padding: 9px 5px;
+		// display: inline;
+		// border-radius: 18%;
+		// font-family: "Arial";
+		// border: 0;
+		// margin: 0px 10px;
+		// background: var(--interactive-accent);
+		// font-size: 15px;
+		// line-height: 50%;
+		// width: auto;
+		// height: auto;
+		// box-sizing: content-box;
+
+		// Add a click event listener to the slider value text
+		sliderValueText.addEventListener('click', () => {
+			console.log("test");
+			this.resetEditorWidth()
+		});
 
 		// Create the status bar item
 		const statusBarItemEl = this.addStatusBarItem();
@@ -92,9 +134,10 @@ export default class EditorWidthSlider extends Plugin {
 	}
 
 	resetEditorWidth() {
-		const value = 0;
 		// const widthInPixels = 400 + value * 10;
-		this.settings.sliderPercentage = value.toString();
+		this.settings.sliderPercentage = this.settings.sliderPercentageDefault;
+		const slider = document.getElementById('editor-width-slider')
+		if (slider) slider.value = this.settings.sliderPercentageDefault;
 
 		this.saveSettings();
 		this.updateEditorStyle();
