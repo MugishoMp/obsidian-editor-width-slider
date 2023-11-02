@@ -107,7 +107,6 @@ export default class EditorWidthSlider extends Plugin {
 
 		// Add a click event listener to the slider value text
 		sliderValueText.addEventListener('click', () => {
-			console.log("test");
 			this.resetEditorWidth()
 		});
 
@@ -133,7 +132,6 @@ export default class EditorWidthSlider extends Plugin {
 		const sliderValue = document.getElementById('editor-width-slider-value') as HTMLInputElement;
 		if (slider) {
 			if (sliderValue) {
-				console.log("2");
 				slider.value = this.settings.sliderPercentageDefault;
 				sliderValue.textContent = this.settings.sliderPercentageDefault.toString();
 			}
@@ -198,10 +196,8 @@ export default class EditorWidthSlider extends Plugin {
 	}
 
 	updateEditorStyleYAML() {
-		console.log("1.1");
 		// if there is yaml frontmatter, take info from yaml, otherwise take info from slider
 		const file = this.app.workspace.getActiveFile() as TFile; // Currently Open Note
-		console.log("1.2");
 		if(file.name) {
 			const metadata = app.metadataCache.getFileCache(file);
 			// const metadata = app.vault.metadataCache.getFileCache(file);
