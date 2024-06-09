@@ -83,13 +83,13 @@ export default class EditorWidthSlider extends Plugin {
 
 		// Add the CSS properties to the span element
 		sliderValueText.style.color = 'white';
-		sliderValueText.style.padding = '8px 5px';
+		sliderValueText.style.padding = '4px 3px';
 		sliderValueText.style.display = 'inline';
 		sliderValueText.style.borderRadius = '18%';
 		sliderValueText.style.border = '0';
-		sliderValueText.style.margin = '0px 10px';
+		sliderValueText.style.margin = '0px 5px';
 		sliderValueText.style.background = 'var(--interactive-accent)';
-		sliderValueText.style.fontSize = '13px';
+		sliderValueText.style.fontSize = '9px';
 		sliderValueText.style.lineHeight = '50%';
 		sliderValueText.style.width = 'auto';
 		sliderValueText.style.height = 'auto';
